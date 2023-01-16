@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="y_axis_length">190dp</dimen>
+    <dimen name="horizontal_padding_graph">24dp</dimen>
+    <dimen name="graph_line_width">4dp</dimen>
+    <dimen name="graph_line_thickness">1dp</dimen>
+    <dimen name="graph_padding">24dp</dimen>
+</resources>
