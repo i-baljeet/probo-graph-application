@@ -5,4 +5,7 @@
     <dimen name="graph_line_width">4dp</dimen>
     <dimen name="graph_line_thickness">1dp</dimen>
     <dimen name="graph_padding">24dp</dimen>
+    <dimen name="axes_labels">8sp</dimen>
+    <dimen name="y_axis_label_right_margin">8dp</dimen>
+    <dimen name="x_axis_label_top_margin">4dp</dimen>
 </resources>
