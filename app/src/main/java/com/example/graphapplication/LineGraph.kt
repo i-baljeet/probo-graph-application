@@ -4,9 +4,10 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
-import android.util.TypedValue
 import android.view.View
-import android.widget.Toast
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
 
 
 class LineGraph: View{
@@ -35,6 +36,7 @@ class LineGraph: View{
     private var areXAxisLabelsSet: Boolean = false
     private var areYAxisLabelsSet: Boolean = false
     private var areDataPointsSet: Boolean = false
+    private var isPathSet: Boolean = false
 
     init {
         paint.color = Color.BLACK
@@ -49,7 +51,7 @@ class LineGraph: View{
         if(areXAxisLabelsSet)
             drawXAxisLabel(canvas, paint)
         if(areDataPointsSet)
-            plotGraphData(canvas, paint)
+            plotGraphData(canvas, paint, path)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -109,16 +111,38 @@ class LineGraph: View{
         areDataPointsSet = true
     }
 
-    private fun plotGraphData(canvas: Canvas?, paint: Paint) {
-        paint.color = Color.BLUE
+    private fun plotGraphData(canvas: Canvas?, paint: Paint, path: Path) {
+        path.reset()
+
+        paint.color = Color.RED
         paint.strokeWidth = 4f
+
+        val adjustedLineGraphData: MutableList<Pair<Float, Float>> = mutableListOf()
 
         for(data in lineGraphData.data) {
             val xPosition: Float = lineGraphData.normalizeTime(graphWidth, data.first) + graphXOrigin
             val yPosition: Float = graphYOrigin - (data.second * (graphHeight / 100))
             Log.d("Points", "$xPosition, $yPosition")
             canvas?.drawCircle(xPosition, yPosition, 4f, paint)
+            adjustedLineGraphData.add(Pair(xPosition, yPosition))
         }
+
+        val countPoints: Int = adjustedLineGraphData.size
+        var i: Int = 1
+
+        path.moveTo(adjustedLineGraphData[i-1].first, adjustedLineGraphData[i-1].second)
+
+        while(i < countPoints) {
+            val controlX = (adjustedLineGraphData[i-1].first + adjustedLineGraphData[i].first) / 2
+            val controlY = adjustedLineGraphData[i-1].second
+            val pointY = adjustedLineGraphData[i].second
+
+            path.cubicTo(controlX, controlY, controlX, pointY, adjustedLineGraphData[i].first, adjustedLineGraphData[i].second)
+            i++
+        }
+
+        paint.color = Color.BLUE
+        canvas?.drawPath(path, paint)
     }
 
     fun setXAxisLabel(list: List<String>) {

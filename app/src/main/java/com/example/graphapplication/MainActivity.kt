@@ -17,8 +17,8 @@ class MainActivity : AppCompatActivity() {
         var data: MutableList<Pair<Float, Float>> = mutableListOf()
         val random: Random = Random()
 
-        for(i in 1..100){
-            val p: Pair<Float, Float> = Pair(random.nextInt(180).toFloat(), random.nextFloat()*100)
+        for(i in 1..50){
+            val p: Pair<Float, Float> = Pair(i.toFloat(), random.nextFloat()*100)
             data.add(p)
         }
 
